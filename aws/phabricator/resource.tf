@@ -1,4 +1,4 @@
-variable "ami" { default = "ami-6edd3078" }
+variable "ami" {}
 variable "subnets" { type = "list" }
 variable "env" { default = "dev" }
 variable "security_groups" { type = "list" }
