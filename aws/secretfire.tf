@@ -11,7 +11,7 @@ variable "public_key" { default = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDrucCBn
 # While there is technically a "data.availability_zones.available" data, it can't be interpolated into counts. Sad!
 variable "availability_zones" { default = ["us-west-2a", "us-west-2b", "us-west-2c"] }
 
-module "env" {
+module "dev" {
     source = "./env"
     env = "${var.env}"
     ami = "${var.ami}"
