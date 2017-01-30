@@ -1,0 +1,1 @@
+tf remote config -backend s3 -backend-config 'bucket=jeffawang' -backend-config 'key=secretfire.tfstate' -backend-config 'region=us-west-2'
