@@ -6,6 +6,11 @@ resource "aws_vpc" "vpc" {
     }
 }
 
+resource "aws_key_pair" "key" {
+    key_name = "${var.key_name}"
+    public_key = "${var.public_key}"
+}
+
 resource "aws_internet_gateway" "public" {
     vpc_id = "${aws_vpc.vpc.id}"
     tags {
@@ -84,10 +89,10 @@ resource "aws_route_table_association" "public" {
 }
 
 resource "aws_instance" "bastion" {
-    ami = "${var.ephemeral_ami}"
+    ami = "${var.ami}"
     instance_type = "t2.nano"
     subnet_id = "${aws_subnet.public.*.id[0]}"
-    key_name = "${var.key_name}"
+    key_name = "${aws_key_pair.key.key_name}"
     vpc_security_group_ids = ["${aws_security_group.public_ssh.id}"]
     tags {
         Name = "bastion-${var.env}"
@@ -149,3 +154,4 @@ output "public_subnets" { value = ["${aws_subnet.public.*.id}"] }
 output "private_security_group" { value = "${aws_security_group.private.id}" }
 output "bastion_ip" { value = "${aws_eip.bastion.public_ip}" }
 output "vpc" { value = "${aws_vpc.vpc.id}" }
+output "key_name" { value = "${aws_key_pair.key.key_name}" }
