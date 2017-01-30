@@ -20,6 +20,11 @@ resource "aws_instance" "phabricator" {
         Name = "phabricator-${var.env}"
         Env = "${var.env}"
     }
+    root_block_device {
+        volume_type = "gp2"
+        delete_on_termination = false
+        volume_size = 20
+    }
 }
 
 resource "aws_security_group" "phabricator" {
