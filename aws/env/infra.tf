@@ -23,10 +23,10 @@ resource "aws_eip" "nat" {
     vpc = true
 }
 
-resource "aws_nat_gateway" "nat" {
-    subnet_id = "${aws_subnet.public.*.id[count.index]}"
-    allocation_id = "${aws_eip.nat.id}"
-}
+#resource "aws_nat_gateway" "nat" {
+#    subnet_id = "${aws_subnet.public.*.id[count.index]}"
+#    allocation_id = "${aws_eip.nat.id}"
+#}
 
 resource "aws_subnet" "public" {
     vpc_id = "${aws_vpc.vpc.id}"
@@ -50,7 +50,7 @@ resource "aws_subnet" "private" {
         Name = "${var.env}-private-${var.availability_zones[count.index]}"
         Env = "${var.env}"
     }
-    depends_on = [ "aws_nat_gateway.nat" ]
+    #depends_on = [ "aws_nat_gateway.nat" ]
     count = "${length(var.availability_zones)}"
 }
 
@@ -59,10 +59,10 @@ resource "aws_route_table" "private" {
     tags {
         Name = "${var.env}-private"
     }
-    route {
-        cidr_block = "0.0.0.0/0"
-        nat_gateway_id = "${aws_nat_gateway.nat.id}"
-    }
+#    route {
+#        cidr_block = "0.0.0.0/0"
+#        nat_gateway_id = "${aws_nat_gateway.nat.id}"
+#    }
 }
 
 resource "aws_route_table_association" "private" {
