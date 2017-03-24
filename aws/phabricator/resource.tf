@@ -14,7 +14,7 @@ resource "aws_instance" "phabricator" {
     ami = "${var.ami}"
     instance_type = "t2.small"
     subnet_id = "${var.subnets[0]}"
-    vpc_security_group_ids = ["${var.security_groups}", "${aws_security_group.phabricator.id}"]
+    vpc_security_group_ids = ["${var.security_groups}", "${aws_security_group.phabricator.id}", "${aws_security_group.phabricator-git-ssh.id}"]
     key_name = "${var.key_name}"
     tags {
         Name = "phabricator-${var.env}"
@@ -40,6 +40,18 @@ resource "aws_security_group" "phabricator" {
     ingress {
         from_port = 80
         to_port = 80
+        protocol = "tcp"
+        cidr_blocks = ["0.0.0.0/0"]
+    }
+}
+
+resource "aws_security_group" "phabricator-git-ssh" {
+    name = "phabricator-${var.env}-git-ssh"
+    description = "Allow git ssh traffic on 2222"
+    vpc_id = "${var.vpc}"
+    ingress {
+        from_port = 2222
+        to_port = 2222
         protocol = "tcp"
         cidr_blocks = ["0.0.0.0/0"]
     }
